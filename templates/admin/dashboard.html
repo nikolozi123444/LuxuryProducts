@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}ადმინ პანელი - Luxury Products{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-cog"></i> ადმინისტრაციის პანელი
+            </h1>
+        </div>
+    </div>
+
+
+    <div class="row mb-5">
+        <div class="col-md-3 mb-4">
+            <div class="admin-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">პროდუქტები</h6>
+                        <h3 class="mb-0">{{ products_count }}</h3>
+                    </div>
+                    <div class="admin-icon">
+                        <i class="fas fa-shopping-bag fa-2x text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="admin-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">კატეგორიები</h6>
+                        <h3 class="mb-0">{{ categories_count }}</h3>
+                    </div>
+                    <div class="admin-icon">
+                        <i class="fas fa-tags fa-2x text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="admin-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">მომხმარებლები</h6>
+                        <h3 class="mb-0">{{ users_count }}</h3>
+                    </div>
+                    <div class="admin-icon">
+                        <i class="fas fa-users fa-2x text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="admin-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">შეტყობინებები</h6>
+                        <h3 class="mb-0">{{ messages_count }}</h3>
+                    </div>
+                    <div class="admin-icon">
+                        <i class="fas fa-envelope fa-2x text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3>სწრაფი ქმედებები</h3>
+            <div class="d-flex flex-wrap gap-3">
+                <a href="{{ url_for('add_product') }}" class="btn btn-luxury">
+                    <i class="fas fa-plus"></i> ახალი პროდუქტი
+                </a>
+                <a href="{{ url_for('add_category') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-plus"></i> ახალი კატეგორია
+                </a>
+                <a href="{{ url_for('products') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-shopping-bag"></i> პროდუქტების ნახვა
+                </a>
+                <a href="{{ url_for('chat_users') }}" class="btn btn-outline-info mt-3">მომხმარებლის ჩატები</a>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- ბოლო პროდუქტები და შეტყობინებები -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="admin-card h-100">
+            <h4><i class="fas fa-clock"></i> ბოლო პროდუქტები</h4>
+            {% if recent_products %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>სახელი</th>
+                                <th>კატეგორია</th>
+                                <th>ფასი</th>
+                                <th>თარიღი</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in recent_products %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url_for('product_detail', id=product.id) }}">
+                                            {{ product.name[:20] }}{% if product.name|length > 20 %}...{% endif %}
+                                        </a>
+                                    </td>
+                                    <td>{{ product.category.name }}</td>
+                                    <td>₾{{ product.price }}</td>
+                                    <td>{{ product.created_at.strftime('%m/%d') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('edit_product', id=product.id) }}" class="btn btn-sm btn-primary">✏</a>
+                                        <form action="{{ url_for('delete_product', id=product.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('დარწმუნებული ხარ, რომ გინდა წაშლა?');">
+                                            <button type="submit" class="btn btn-sm btn-danger">🗑</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">პროდუქტები არ არის.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="admin-card h-100">
+            <h4><i class="fas fa-envelope"></i> ბოლო შეტყობინებები</h4>
+            {% if recent_messages %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>სახელი</th>
+                                <th>ელ-ფოსტა</th>
+                                <th>შეტყობინება</th>
+                                <th>თარიღი</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for message in recent_messages %}
+                                <tr>
+                                    <td>{{ message.name }}</td>
+                                    <td>{{ message.email }}</td>
+                                    <td>{{ message.message[:30] }}{% if message.message|length > 30 %}...{% endif %}</td>
+                                    <td>{{ message.created_at.strftime('%m/%d') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">შეტყობინებები არ არის.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- შეკვეთები ცალკე row-ში -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="admin-card">
+            <h4><i class="fas fa-box"></i> შეკვეთები</h4>
+            {% if orders %}
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>მომხმარებელი</th>
+                                <th>მისამართი</th>
+                                <th>ტელეფონი</th>
+                                <th>თარიღი</th>
+                                <th>ჯამური ფასი</th>
+                                <th>სტატუსი</th>
+                                <th>ქმედება</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.full_name }}</td>
+                                    <td>{{ order.address }}</td>
+                                    <td>{{ order.phone }}</td>
+                                    <td>{{ order.created_at.strftime('%Y-%m-%d') }}</td>
+                                    <td>₾{{ order.total_price }}</td>
+                                    <td>
+                                                <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}">
+                                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                                        {% for status_option in ['საწყობშია', 'მალე გამოვა საწყობიდან', 'გზაშია', 'მალე მივა დანიშნულების ადგილას', 'ჩაბარებულია'] %}
+                                                  <option value="{{ status_option }}" {% if order.status == status_option %}selected{% endif %}>{{ status_option }}</option>
+                                                            {% endfor %}
+                                                     </select>
+                                                    </form>
+
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('order_detail', order_id=order.id) }}" class="btn btn-sm btn-secondary">დეტალები</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">შეკვეთები ჯერ არ არსებობს.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+    <div class="col-md-6">
+        <div class="admin-card">
+            <h4><i class="fas fa-chart-line"></i> მომხმარებელთა რეგისტრაციის გრაფიკი (7 დღე)</h4>
+            <canvas id="registrationChart" width="100%" height="60"></canvas>
+        </div>
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('registrationChart').getContext('2d');
+    const registrationChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ registration_dates|tojson }},
+            datasets: [{
+                label: 'რეგისტრაციები',
+                data: {{ registration_counts|tojson }},
+                backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                borderColor: 'rgba(255, 193, 7, 1)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
+</script>
+
+
+
+
+
+
+{% endblock %}

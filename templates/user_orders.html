@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}ჩემი შეკვეთები{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4"><i class="fas fa-box"></i> ჩემი შეკვეთები</h1>
+
+    {% if orders %}
+        {% for order in orders %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    შეკვეთის ნომერი #{{ order.id }} | სტატუსი: <strong>{{ order.status }}</strong>
+                </div>
+                <div class="card-body">
+                    <p><strong>თარიღი:</strong> {{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                    <p><strong>მისამართი:</strong> {{ order.address }}</p>
+                    <p><strong>ტელეფონი:</strong> {{ order.phone }}</p>
+                    <p><strong>სულ თანხა:</strong> ₾{{ order.total_price }}</p>
+
+                    <ul class="list-group mt-3">
+                        {% for item in order.items %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ item.product.name }} x{{ item.quantity }}
+                            <span class="badge bg-primary rounded-pill">₾{{ item.product.price * item.quantity }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">ჯერ არ გაგიკეთებიათ შეკვეთა.</div>
+    {% endif %}
+</div>
+{% endblock %}

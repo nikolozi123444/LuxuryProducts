@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}მომხმარებლები ჩატისთვის{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>მომხმარებლები მხარდაჭერისთვის</h2>
+    <ul class="list-group">
+        {% for user in users %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ user.username }} ({{ user.email }})
+            <a href="{{ url_for('admin_support', user_id=user.id) }}" class="btn btn-sm btn-primary">ჩატში გადასვლა</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

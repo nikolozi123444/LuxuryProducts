@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}შეკვეთის დეტალები{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">შეკვეთის დეტალები: #{{ order.id }}</h2>
+
+    <ul class="list-group">
+        <li class="list-group-item"><strong>მომხმარებელი:</strong> {{ order.full_name }}</li>
+        <li class="list-group-item"><strong>მისამართი:</strong> {{ order.address }}</li>
+        <li class="list-group-item"><strong>ტელეფონი:</strong> {{ order.phone }}</li>
+        <li class="list-group-item"><strong>შეკვეთის თარიღი:</strong> {{ order.created_at.strftime('%Y-%m-%d') }}</li>
+        <li class="list-group-item"><strong>სტატუსი:</strong> {{ order.status }}</li>
+        <li class="list-group-item"><strong>ჯამური ფასი:</strong> ₾{{ order.total_price }}</li>
+    </ul>
+
+    <hr>
+
+    <h4 class="mt-4">პროდუქტები შეკვეთაში:</h4>
+    {% if order.items %}
+        <ul class="list-group">
+            {% for item in order.items %}
+                <li class="list-group-item d-flex justify-content-between">
+                    {{ item.product.name }} (x{{ item.quantity }})
+                    <span>₾{{ item.product.price * item.quantity }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>პროდუქტები არ მოიძებნა.</p>
+    {% endif %}
+</div>
+{% endblock %}

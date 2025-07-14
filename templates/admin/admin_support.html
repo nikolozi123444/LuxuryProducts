@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}მომხმარებლის მხარდაჭერა{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-3">მიმოწერა მომხმარებელთან: {{ user.username }}</h2>
+
+    <div class="chat-box border p-3 mb-3" style="height: 300px; overflow-y: scroll;">
+        {% for msg in messages %}
+            <div class="{% if msg.sender_id == current_user.id %}text-end{% else %}text-start{% endif %}">
+                <div class="badge bg-{% if msg.sender_id == current_user.id %}primary{% else %}secondary{% endif %}">
+                    {{ msg.message }}
+                </div>
+                <small class="d-block text-muted">{{ msg.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="input-group">
+            {{ form.message(class="form-control", placeholder="მიწერე მომხმარებელს...") }}
+            <button class="btn btn-warning" type="submit">გაგზავნა</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

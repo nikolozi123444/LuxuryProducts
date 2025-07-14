@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}კონტაქტი - Luxury Products{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">კონტაქტი</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-luxury">
+                <h3><i class="fas fa-envelope"></i> გამოგვიგზავნეთ შეტყობინება</h3>
+                <p>თუ გაქვთ რაიმე კითხვა ან წინადადება, გამოგვიგზავნეთ შეტყობინება და ჩვენ მოგიგეთ პასუხი მაქსიმალურად სწრაფად.</p>
+
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.name.label(class="form-label") }}
+                                {{ form.name(class="form-control") }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.email.label(class="form-label") }}
+                                {{ form.email(class="form-control") }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.email.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.message.label(class="form-label") }}
+                        {{ form.message(class="form-control", rows="5") }}
+                        {% if form.message.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.message.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-luxury">
+                        <i class="fas fa-paper-plane"></i> შეტყობინების გაგზავნა
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="contact-info">
+                <h3><i class="fas fa-info-circle"></i> საკონტაქტო ინფორმაცია</h3>
+
+                <div class="contact-item mb-4">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt fa-2x text-warning"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h5>მისამართი</h5>
+                        <p>თბილისი, საქართველო</p>
+                    </div>
+                </div>
+
+                <div class="contact-item mb-4">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone fa-2x text-warning"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h5>ტელეფონი</h5>
+                        <p>+995 555 123 456</p>
+                    </div>
+                </div>
+
+                <div class="contact-item mb-4">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope fa-2x text-warning"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h5>ელ-ფოსტა</h5>
+                        <p>info@luxuryproducts.ge</p>
+                    </div>
+                </div>
+
+                <div class="contact-item mb-4">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock fa-2x text-warning"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h5>სამუშაო საათები</h5>
+                        <p>ორშაბათი - პარასკევი: 09:00 - 18:00<br>
+                           შაბათი: 10:00 - 16:00<br>
+                           კვირა: დახურული</p>
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <h5>გაგვყევით:</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-info">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-danger">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-success">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

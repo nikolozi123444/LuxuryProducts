@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}ჩემი კალათა - Luxury Products{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4"><i class="fas fa-shopping-cart"></i> ჩემი კალათა</h1>
+
+    {% if cart_items %}
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>პროდუქტი</th>
+                    <th>ფასი</th>
+                    <th>რაოდენობა</th>
+                    <th>ჯამი</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>₾{{ item.product.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>₾{{ item.product.price * item.quantity }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('remove_from_cart', item_id=item.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> წაშლა
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <h4 class="text-end mt-3">
+    სულ გადასახდელი: <span class="text-success">₾{{ total_price }}</span>
+</h4>
+
+    <div class="text-end mt-4">
+    <a href="{{ url_for('checkout') }}" class="btn btn-success btn-lg">
+        <i class="fas fa-credit-card"></i> შეკვეთის გაგრძელება
+    </a>
+</div>
+
+    {% else %}
+        <div class="alert alert-info">
+            თქვენი კალათა ცარიელია.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

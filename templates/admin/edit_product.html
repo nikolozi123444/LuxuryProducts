@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}პროდუქტის რედაქტირება{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0"><i class="fas fa-edit"></i> პროდუქტის რედაქტირება</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control", rows=3) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.price.label(class="form-label") }}
+                            {{ form.price(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.image_url.label(class="form-label") }}
+                            {{ form.image_url(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.category_id.label(class="form-label") }}
+                            {{ form.category_id(class="form-select") }}
+                        </div>
+
+                        <div class="form-check form-switch mb-3">
+                            {{ form.in_stock(class="form-check-input") }}
+                            {{ form.in_stock.label(class="form-check-label") }}
+                        </div>
+
+                        <div class="form-check form-switch mb-3">
+                            {{ form.featured(class="form-check-input") }}
+                            {{ form.featured.label(class="form-check-label") }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">შენახვა</button>
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">გაუქმება</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

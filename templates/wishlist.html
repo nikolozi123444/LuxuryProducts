@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}სურვილების სია{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1>სურვილების სია</h1>
+    <hr>
+    {% if items %}
+        <div class="row">
+            {% for item in items %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ item.product.image_url or 'https://via.placeholder.com/400' }}" class="card-img-top">
+                        <div class="card-body">
+                            <h5>{{ item.product.name }}</h5>
+                            <p>₾{{ item.product.price }}</p>
+                            <a href="{{ url_for('product_detail', id=item.product.id) }}" class="btn btn-primary btn-sm">ნახვა</a>
+                            <form method="POST" action="{{ url_for('toggle_wishlist', product_id=item.product.id) }}" class="d-inline">
+                                {{ wishlist_form.hidden_tag() }}
+                                <button class="btn btn-danger btn-sm" type="submit">
+                                    <i class="fas fa-trash-alt"></i> წაშლა
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">სურვილების სია ცარიელია.</div>
+    {% endif %}
+</div>
+{% endblock %}

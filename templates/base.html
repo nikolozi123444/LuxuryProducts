@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Luxury Products - ლუქს პროდუქტები{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='luxury.png') }}">
+
+    <body>
+     <a href="{{ url_for('chat') }}" class="support-btn" title="მოგვწერე!">
+        <i class="fas fa-comments"></i>
+    </a>
+
+
+    <!-- Wishlist ღილაკი -->
+<a href="{{ url_for('wishlist') }}" class="wishlist-btn" title="სურვილების სია">
+    <i class="fas fa-heart"></i>
+    {% if wishlist_count > 0 %}
+        <span class="badge bg-danger">{{ wishlist_count }}</span>
+    {% endif %}
+</a>
+
+<!-- Cart ღილაკი -->
+<a href="{{ url_for('cart') }}" class="cart-btn" title="კალათა">
+    <i class="fas fa-shopping-cart"></i>
+    {% if cart_count > 0 %}
+        <span class="badge bg-danger">{{ cart_count }}</span>
+    {% endif %}
+</a>
+
+
+
+
+
+     </body>
+
+
+    <style>
+        .support-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #f1c40f;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            transition: transform 0.2s ease;
+        }
+
+        .support-btn:hover {
+            transform: scale(1.1);
+            background-color: #e0b90e;
+        }
+
+
+.wishlist-btn {
+    position: fixed;
+    bottom: 170px;
+    right: 20px;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    transition: transform 0.2s ease;
+}
+.wishlist-btn:hover {
+    transform: scale(1.1);
+    background-color: #c0392b;
+}
+
+        <style>
+.notification-icon {
+    position: relative;
+    font-size: 22px;
+    color: #000;
+    text-decoration: none;
+}
+
+.notification-icon i {
+    font-size: 22px;
+}
+
+.notification-count {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    min-width: 20px;
+    text-align: center;
+}
+</style>
+
+
+
+
+    </style>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+     <nav class="navbar navbar-expand-lg navbar-dark luxury-bg">
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <!-- TBC ლოგო -->
+            <a href="https://www.tbcbank.ge/web/en/web/guest/education" target="_blank">
+                <img src="https://public.youware.com/users-website-assets/prod/de1beeb9-c3d0-4da5-ad8f-ebbfeaa957b2/a9a0931e99f84d4b9354ac5ba96a3e1c.png"
+                     alt="TBC Logo" style="height: 30px;" class="img-fluid me-2">
+            </a>
+
+            <!-- Luxury Products -->
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                Luxury Products
+            </a>
+        </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-home"></i> მთავარი
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('products') }}">
+                            <i class="fas fa-shopping-bag"></i> პროდუქტები
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('about') }}">
+                            <i class="fas fa-info-circle"></i> ჩვენ შესახებ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('contact') }}">
+                            <i class="fas fa-envelope"></i> კონტაქტი
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                                    <i class="fas fa-cog"></i> ადმინ პანელი
+                                </a>
+                            </li>
+                        {% endif %}
+
+
+
+                        <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="rounded-circle bg-secondary text-white text-center me-2" style="width: 32px; height: 32px; line-height: 32px;">
+            {{ current_user.username[0] | upper }}
+        </div>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+        <li>
+            <a class="dropdown-item" href="{{ url_for('account_settings') }}">
+                <i class="fas fa-cog"></i> პარამეტრები
+            </a>
+            <li><a class="dropdown-item" href="{{ url_for('user_orders') }}">ჩემი შეკვეთები</a></li>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+         <li><a class="dropdown-item" href="{{ url_for('logout') }}">გასვლა</a></li>
+          </ul>
+</li>
+        <li>
+
+
+
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">
+                                <i class="fas fa-sign-in-alt"></i> შესვლა
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">
+                                <i class="fas fa-user-plus"></i> რეგისტრაცია
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-gem"></i> Luxury Products</h5>
+                    <p>ლუქს პროდუქტების ოფიციალური ონლაინ მაღაზია საქართველოში. ჩვენ გთავაზობთ ყველაზე ხარისხიან და ექსკლუზიურ პროდუქტებს.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>სწრაფი ლინკები</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('index') }}">მთავარი</a></li>
+                        <li><a href="{{ url_for('products') }}">პროდუქტები</a></li>
+                        <li><a href="{{ url_for('about') }}">ჩვენ შესახებ</a></li>
+                        <li><a href="{{ url_for('contact') }}">კონტაქტი</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>კონტაქტი</h5>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i> თბილისი, საქართველო<br>
+                        <i class="fas fa-phone"></i> +995 555 123 456<br>
+                        <i class="fas fa-envelope"></i> info@luxuryproducts.ge
+                    </p>
+                    <div class="mt-3">
+                        <a href="#" class="me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-twitter fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p>&copy; 2025 Luxury Products. ყველა უფლება დაცულია.</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="https://tbceducation.ge" target="_blank">
+                            <img src="https://upload.wikimedia.org/wikipedia/ka/archive/a/af/20200328105650%21Tbc-logo-ka_GE.svg" alt="TBC Education" class="tbc-logo">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
